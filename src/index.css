@@ -195,7 +195,71 @@ a {
 }
 
 .property-area {
-  margin: 0;
+  margin: 0 0 4px;
   color: var(--text-muted);
   font-size: 14px;
+}
+
+.property-layout {
+  margin: 0 0 16px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.property-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* 物件の新規登録・編集フォーム */
+.property-form {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.property-form h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.property-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.property-form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* 補助的なボタンスタイル */
+.button-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.button-secondary:hover:not(:disabled) {
+  background: var(--bg);
+}
+
+.button-danger {
+  background: transparent;
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.button-danger:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.page-hint {
+  color: var(--text-muted);
 }

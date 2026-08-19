@@ -4,7 +4,7 @@
 
 ## プロジェクト概要
 
-Supabase認証機能付きの不動産管理Webアプリ。React + Viteで構成し、メール＋パスワードでの会員登録・ログイン、ログイン後の物件一覧表示（ダミーデータ）を提供する。
+Supabase認証機能付きの不動産管理Webアプリ。React + Viteで構成し、メール＋パスワードでの会員登録・ログイン、ログイン後は自分が登録した物件の一覧表示・登録・編集・削除（CRUD）を提供する。
 
 ## 要件
 
@@ -23,6 +23,12 @@ Supabase認証機能付きの不動産管理Webアプリ。React + Viteで構成
 ### UI要件
 - ログイン画面と会員登録画面はシンプルなフォーム
 - 物件一覧画面は物件名・家賃・エリアを表示するカード形式
+
+### 物件管理（CRUD）要件
+- 物件ごとに「物件名」「家賃（円）」「エリア名」「間取り（例：1LDK）」を`properties`テーブルに保存する
+- 各物件は登録したユーザーの`user_id`を記録する
+- RLSを有効化し、「自分が登録した物件のみ表示・編集・削除できる」ポリシーを設定する（`supabase/schema.sql`参照）
+- 物件一覧（SELECT）・新規登録フォーム（INSERT）・編集フォーム（UPDATE）・削除ボタン（DELETE）をReact側に実装する
 
 ## 開発コマンド
 
@@ -49,16 +55,19 @@ Supabase側は Authentication > Providers > Email を有効化しておく。動
 ## ディレクトリ構成
 
 ```
+supabase/
+  schema.sql                  # propertiesテーブル・RLSポリシーのDDL（SQL Editorで実行）
 src/
   lib/supabaseClient.js       # Supabaseクライアントの初期化（.envの値を読み込む）
+  lib/properties.js           # propertiesテーブルへのCRUD関数（fetch/create/update/delete）
   context/AuthContext.jsx     # 認証状態（session/user）を共有するContext。signUp/signIn/signOutを提供
   components/ProtectedRoute.jsx  # 未ログイン時に/loginへリダイレクトするラッパー
-  data/dummyProperties.js     # 物件一覧のダミーデータ（物件名・家賃・エリア）
-  pages/Login.jsx             # ログイン画面
-  pages/SignUp.jsx            # 会員登録画面
-  pages/PropertyList.jsx      # 物件一覧画面（カード形式）＋ログアウトボタン
-  App.jsx                     # ルーティング定義（/login, /signup, /properties）
-  main.jsx                    # エントリーポイント（BrowserRouter + AuthProviderでラップ）
+  components/PropertyForm.jsx    # 物件の新規登録・編集で共通利用するフォーム
+  pages/Login.jsx              # ログイン画面
+  pages/SignUp.jsx             # 会員登録画面
+  pages/PropertyList.jsx       # 物件一覧画面（Supabaseと連携したCRUD）＋ログアウトボタン
+  App.jsx                      # ルーティング定義（/login, /signup, /properties）
+  main.jsx                     # エントリーポイント（BrowserRouter + AuthProviderでラップ）
 ```
 
 ## 実装上の注意点
@@ -67,3 +76,4 @@ src/
 - ルート保護は `ProtectedRoute` コンポーネントで行う。新しいログイン必須ページを追加する際はこれでラップする。
 - Supabaseの鍵情報を直接コード中にハードコーディングしない。必ず `import.meta.env.VITE_*` 経由で参照する。
 - コメントは日本語で統一する。
+- `properties`テーブルへのアクセスは `src/lib/properties.js` の関数経由で行う。RLSにより自分が登録した行のみ操作できるため、`user_id`はINSERT時にのみ明示的に付与し、UPDATE/DELETEでは意図的に付与しない（RLSポリシーが絞り込みを担保する）。
