@@ -82,3 +82,8 @@ src/
 - Supabaseの鍵情報を直接コード中にハードコーディングしない。必ず `import.meta.env.VITE_*` 経由で参照する。
 - コメントは日本語で統一する。
 - `properties`テーブルへのアクセスは `src/lib/properties.js` の関数経由で行う。RLSにより自分が登録した行のみ操作できるため、`user_id`はINSERT時にのみ明示的に付与し、UPDATE/DELETEでは意図的に付与しない（RLSポリシーが絞り込みを担保する）。
+
+## デプロイ情報
+
+- 本番URL：https://real-estate-management-pi.vercel.app/
+- Supabaseプロジェクト名：realestate-app
