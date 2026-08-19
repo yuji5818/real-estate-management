@@ -30,6 +30,10 @@ Supabase認証機能付きの不動産管理Webアプリ。React + Viteで構成
 - RLSを有効化し、「自分が登録した物件のみ表示・編集・削除できる」ポリシーを設定する（`supabase/schema.sql`参照）
 - 物件一覧（SELECT）・新規登録フォーム（INSERT）・編集フォーム（UPDATE）・削除ボタン（DELETE）をReact側に実装する
 
+### デプロイ要件（Vercel）
+- `vercel.json` にSPA向けのrewrite設定を追加する。どのURLにアクセスされても `/index.html` を返し、React Router側でルーティングを解決する
+- 環境変数（`VITE_SUPABASE_URL` / `VITE_SUPABASE_PUBLISHABLE_KEY`）は `vercel.json` に含めず、Vercelダッシュボードの Project Settings > Environment Variables で設定する
+
 ## 開発コマンド
 
 ```bash
@@ -55,6 +59,7 @@ Supabase側は Authentication > Providers > Email を有効化しておく。動
 ## ディレクトリ構成
 
 ```
+vercel.json                   # SPA向けrewrite設定（全パスをindex.htmlへ）。環境変数は含めない
 supabase/
   schema.sql                  # propertiesテーブル・RLSポリシーのDDL（SQL Editorで実行）
 src/
